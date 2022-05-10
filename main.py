@@ -9,17 +9,16 @@ def print_hi(name):
 
 def calc_polynomial(polynomial1,point):
         sum1 = 0
-        for i in range(size + 1):
-            if(i == size):
+        for i in range(size):
+            if i == (size - 1):
                 sum1 += polynomial1[i]
                 break
 
-            sum1 += (point ** (size - i)) * (polynomial1[i])
+            sum1 += (point ** (size - i - 1)) * (polynomial1[i])
         return sum1
 def Bisection_Method(polynomial, start_point, end_point, e):
-    mid = 10000
     index = 0
-    while abs(start_point - mid) > e:
+    while abs(start_point - end_point) > e:
         index += 1
         mid = (start_point + end_point) / 2
         sum_first = calc_polynomial(polynomial, start_point)
@@ -28,7 +27,9 @@ def Bisection_Method(polynomial, start_point, end_point, e):
             start_point = mid
         else:
             end_point = mid
-    print(f'There was a {index}iterations')
+
+
+    print(f'There was a {index} iterations')
     return mid
 
 def general_function(polynomial, start_point, end_point, flag):
@@ -63,7 +64,7 @@ def general_function(polynomial, start_point, end_point, flag):
         else:
             sum_x0 = calc_polynomial(polynomial, num0)
             sum_x1 = calc_polynomial(polynomial, num1)
-            if sum_x0 * sum_x1 <= 0:
+            if sum_x0 * sum_x1 < 0:
                 slice1 = Bisection_Method(polynomial, num0, num1, e)
                 if slice1 in arr:
                     continue
@@ -94,8 +95,9 @@ if __name__ == '__main__':
     for i in range(size+1):
         num = int(input(f'X^{size-i}= '))
         arr.append(num)
+    size += 1
     polynomial = tuple(arr)
     print("press the range")
-    general_function(polynomial, -1, 2, 3)
+    general_function(polynomial, -3, 2, 1)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
