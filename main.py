@@ -78,9 +78,7 @@ def general_function(polynomial, start_point, end_point, flag):
 
 
 
-    #for i in np.arange(start_point, end_point - 0.1, g):
-        #print(i)
-        #print(i+0.1)
+
 
 
 
