@@ -2,9 +2,8 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import math
-import sympy as sp
 from sympy.utilities.lambdify import lambdify
-
+import sympy as sp
 
 def Bisection_Method(polynomial3, start_point, end_point, epsilon):
     iterations_counter = 0
@@ -26,19 +25,22 @@ def Bisection_Method(polynomial3, start_point, end_point, epsilon):
     print(f'After {iterations_counter} iterations, the root is:')
     return mid
 
-def Newton_Raphson(polynomial3, start_point, end_point, epsilon):
+
+def Newton_Raphson(polynomial4, start_point, end_point, epsilon):
     iterations_counter = 0
+    if counter_calls == 0:
+        derivative = my_polynomial.diff(x)
+        derivative = lambdify(x, derivative)
+    else:
+        derivative = my_polynomial_derivative.diff(x)
+        derivative = lambdify(x, derivative)
     x_r1 = (start_point + end_point) / 2
-    while abs(polynomial3(x_r1)) > epsilon:
+    while abs(polynomial4(x_r1)) > epsilon:
         iterations_counter += 1
         x_r = x_r1
-        x_r1 = x_r - (polynomial3(x_r) / polynomial_derivative(x_r))
-
-
+        x_r1 = x_r - (polynomial4(x_r) / derivative(x_r))
     print(f'After {iterations_counter} iterations, the root is:')
     return x_r1
-
-
 
 
 def general_function(polynomial2, start_point, end_point, choice):
@@ -51,7 +53,7 @@ def general_function(polynomial2, start_point, end_point, choice):
         val_x0 = polynomial2(x0)
         val_x1 = polynomial2(x1)
         if val_x0 * val_x1 < 0:
-            #root = Bisection_Method(polynomial2, x0, x1, e)
+            # root = Bisection_Method(polynomial2, x0, x1, e)
             root = Newton_Raphson(polynomial2, x0, x1, e)
             if root in arr_roots or root is None:
                 return
@@ -75,12 +77,10 @@ if __name__ == '__main__':
     print_hi('PyCharm')
     e = 0.001
     x = sp.symbols('x')
-    polynomial = 4 * x ** 3 - 48 * x + 5
-    polynomial_derivative = polynomial.diff(x)#do a derivative
-    polynomial_derivative2 = polynomial_derivative.diff(x)
-    polynomial_derivative = lambdify(x, polynomial_derivative)#define the polynomial_derivative as a function of x like math
-    polynomial = lambdify(x, polynomial)
-
+    my_polynomial = 4 * x ** 3 - 48 * x + 5
+    my_polynomial_derivative = my_polynomial.diff(x)  # do a derivative
+    polynomial_derivative = lambdify(x, my_polynomial_derivative)  # define the polynomial_derivative as a function of x like math
+    polynomial = lambdify(x, my_polynomial)
     """print("Press the range")
     start = input("start point: ")
     end = input("end point: ")
@@ -89,7 +89,9 @@ if __name__ == '__main__':
           "2-Raphson-Newton method"
           "3- Secant method")
     choice = int(input(""))"""
+    counter_calls = 0
     general_function(polynomial, 3, 4, 1)
+    counter_calls += 1
     general_function(polynomial_derivative, 3, 4, 1)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
