@@ -26,6 +26,20 @@ def Bisection_Method(polynomial3, start_point, end_point, epsilon):
     print(f'After {iterations_counter} iterations, the root is:')
     return mid
 
+def Newton_Raphson(polynomial3, start_point, end_point, epsilon):
+    iterations_counter = 0
+    x_r1 = (start_point + end_point) / 2
+    while abs(polynomial3(x_r1)) > epsilon:
+        iterations_counter += 1
+        x_r = x_r1
+        x_r1 = x_r - (polynomial3(x_r) / polynomial_derivative(x_r))
+
+
+    print(f'After {iterations_counter} iterations, the root is:')
+    return x_r1
+
+
+
 
 def general_function(polynomial2, start_point, end_point, choice):
     arr_roots = []
@@ -37,9 +51,10 @@ def general_function(polynomial2, start_point, end_point, choice):
         val_x0 = polynomial2(x0)
         val_x1 = polynomial2(x1)
         if val_x0 * val_x1 < 0:
-            root = Bisection_Method(polynomial2, x0, x1, e)
+            #root = Bisection_Method(polynomial2, x0, x1, e)
+            root = Newton_Raphson(polynomial2, x0, x1, e)
             if root in arr_roots or root is None:
-                break
+                return
             else:
                 arr_roots.append(root)
                 print(arr_roots[index])
@@ -58,12 +73,14 @@ def print_hi(name):
 
 if __name__ == '__main__':
     print_hi('PyCharm')
-    e = 0.00000000001
+    e = 0.001
     x = sp.symbols('x')
-    polynomial = x ** 4 + x ** 3 - 3 * x ** 2
-    polynomial_derivative = polynomial.diff(x)
-    polynomial_derivative = lambdify(x, polynomial_derivative)
+    polynomial = 4 * x ** 3 - 48 * x + 5
+    polynomial_derivative = polynomial.diff(x)#do a derivative
+    polynomial_derivative2 = polynomial_derivative.diff(x)
+    polynomial_derivative = lambdify(x, polynomial_derivative)#define the polynomial_derivative as a function of x like math
     polynomial = lambdify(x, polynomial)
+
     """print("Press the range")
     start = input("start point: ")
     end = input("end point: ")
@@ -72,7 +89,7 @@ if __name__ == '__main__':
           "2-Raphson-Newton method"
           "3- Secant method")
     choice = int(input(""))"""
-    general_function(polynomial, -3, 2, 1)
-    general_function(polynomial_derivative, -3, 2, 1)
+    general_function(polynomial, 3, 4, 1)
+    general_function(polynomial_derivative, 3, 4, 1)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
