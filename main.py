@@ -2,16 +2,8 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import math
-
-
-def calc_polynomial_in_point(polynomial1, point):
-    value = 0
-    for i in range(len(polynomial1)):
-        if i == (len(polynomial1) - 1):
-            value += polynomial1[i]
-            break
-        value += (point ** (len(polynomial1) - i - 1)) * (polynomial1[i])
-    return value
+import sympy as sp
+from sympy.utilities.lambdify import lambdify
 
 
 def Bisection_Method(polynomial3, start_point, end_point, epsilon):
@@ -23,13 +15,13 @@ def Bisection_Method(polynomial3, start_point, end_point, epsilon):
             print("This polynomial does not converge on Bisection Method  ")
             return
         mid = (start_point + end_point) / 2
-        end_val = calc_polynomial_in_point(polynomial3, end_point)
-        mid_val = calc_polynomial_in_point(polynomial3, mid)
+        end_val = polynomial3(end_point)
+        mid_val = polynomial3(mid)
         if end_val * mid_val > 0:
             end_point = mid
         else:
             start_point = mid
-    if round(calc_polynomial_in_point(polynomial, mid)) != 0:
+    if round(polynomial(mid)) != 0:
         return
     print(f'After {iterations_counter} iterations, the root is:')
     return mid
@@ -42,12 +34,12 @@ def general_function(polynomial2, start_point, end_point, choice):
     while x1 < end_point:
         x1 += 0.1
         x1 = round(x1, 1)
-        val_x0 = calc_polynomial_in_point(polynomial2, x0)
-        val_x1 = calc_polynomial_in_point(polynomial2, x1)
+        val_x0 = polynomial2(x0)
+        val_x1 = polynomial2(x1)
         if val_x0 * val_x1 < 0:
             root = Bisection_Method(polynomial2, x0, x1, e)
             if root in arr_roots or root is None:
-                continue
+                break
             else:
                 arr_roots.append(root)
                 print(arr_roots[index])
@@ -55,14 +47,6 @@ def general_function(polynomial2, start_point, end_point, choice):
         x0 = x1
     return arr_roots
 
-
-def create_derive(polynomial_to_derive):
-    for i in range(len(polynomial_to_derive)):
-        if i == len(polynomial_to_derive) - 1:
-            polynomial_to_derive[i] = 0
-        polynomial_to_derive[i] = (len(polynomial_to_derive) - i - 1) * polynomial_to_derive[i]
-    polynomial_to_derive.remove(polynomial_to_derive[len(polynomial_to_derive)-1])
-    return polynomial_to_derive
 
 # Press the green button in the gutter to run the script.
 
@@ -74,16 +58,12 @@ def print_hi(name):
 
 if __name__ == '__main__':
     print_hi('PyCharm')
-    size = int(input("Enter the biggest power of the polynomial: "))
     e = 0.00000000001
-    arr = []
-    print("press the coefficient of: ")
-    for i in range(size+1):
-        num = int(input(f'X^{size-i}= '))
-        arr.append(num)
-    polynomial = tuple(arr)
-    polynomial_derivative = tuple(create_derive(arr))
-    print(polynomial_derivative)
+    x = sp.symbols('x')
+    polynomial = x ** 4 + x ** 3 - 3 * x ** 2
+    polynomial_derivative = polynomial.diff(x)
+    polynomial_derivative = lambdify(x, polynomial_derivative)
+    polynomial = lambdify(x, polynomial)
     """print("Press the range")
     start = input("start point: ")
     end = input("end point: ")
@@ -94,17 +74,5 @@ if __name__ == '__main__':
     choice = int(input(""))"""
     general_function(polynomial, -3, 2, 1)
     general_function(polynomial_derivative, -3, 2, 1)
-
-
-
-
-
-
-
-
-
-
-
-
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
