@@ -42,6 +42,8 @@ def Newton_Raphson(polynomial4, start_point, end_point, epsilon):
             print("Cannot divide by zero!")
             return
         x_r1 = x_r - (polynomial4(x_r) / derivative(x_r))
+    if round(polynomial(x_r1)) != 0:
+        return
     print(f'After {iterations_counter} iterations, the root is:')
     return x_r1
 
@@ -135,11 +137,11 @@ if __name__ == '__main__':
     polynomial = lambdify(x, my_polynomial)
     print("Press the range:")
     start = int(input("start point [the lower point]: "))
-    end = int(input("end point [[the lower point]: "))
+    end = int(input("end point [the larger point]: "))
     print("Press the method you want to display on your polynomial:"
           "\n1-Bisection method"
           "\n2-Raphson-Newton method"
-          "\n3- Secant method")
+          "\n3-Secant method")
     choice = int(input(""))
     counter_calls = 0
     general_function(polynomial, start, end, choice)
